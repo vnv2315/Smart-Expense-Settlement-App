@@ -13,6 +13,7 @@ The project is being built incrementally. The current implementation includes:
 - Password hashing with bcrypt
 - JWT authentication middleware
 - Protected group creation, membership management, and group listing
+- Shared expenses with exact equal splitting in integer paise
 - Centralized API error handling
 
 Expense tracking and settlement calculation will be added in later increments.

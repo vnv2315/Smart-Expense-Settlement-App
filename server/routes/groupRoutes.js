@@ -6,7 +6,9 @@ import {
   listGroups,
   removeMember,
 } from '../controllers/groupController.js';
+import { addExpense } from '../controllers/expenseController.js';
 import authenticate from '../middleware/authenticate.js';
+import { addExpenseValidation } from '../middleware/expenseValidators.js';
 import {
   addMemberValidation,
   createGroupValidation,
@@ -34,6 +36,15 @@ router.post(
   addMember,
 );
 
+router.post(
+  '/:groupId/expenses',
+  groupIdValidation,
+  addExpenseValidation,
+  validateRequest,
+  requireGroupMember,
+  addExpense,
+);
+
 router.delete(
   '/:groupId/members/:userId',
   groupIdValidation,
@@ -44,4 +55,3 @@ router.delete(
 );
 
 export default router;
-
