@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 
 const signupValidation = [
   body('name').trim().notEmpty().withMessage('Name is required'),
@@ -19,22 +19,4 @@ const loginValidation = [
   body('password').notEmpty().withMessage('Password is required'),
 ];
 
-const handleValidationErrors = (req, res, next) => {
-  const result = validationResult(req);
-
-  if (result.isEmpty()) {
-    return next();
-  }
-
-  const error = new Error('Validation failed');
-  error.statusCode = 400;
-  error.details = result.array().map(({ path, msg }) => ({
-    field: path,
-    message: msg,
-  }));
-
-  return next(error);
-};
-
-export { handleValidationErrors, loginValidation, signupValidation };
-
+export { loginValidation, signupValidation };

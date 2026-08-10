@@ -1,16 +1,12 @@
 import { Router } from 'express';
 
 import { login, signup } from '../controllers/authController.js';
-import {
-  handleValidationErrors,
-  loginValidation,
-  signupValidation,
-} from '../middleware/authValidators.js';
+import { loginValidation, signupValidation } from '../middleware/authValidators.js';
+import validateRequest from '../middleware/validateRequest.js';
 
 const router = Router();
 
-router.post('/signup', signupValidation, handleValidationErrors, signup);
-router.post('/login', loginValidation, handleValidationErrors, login);
+router.post('/signup', signupValidation, validateRequest, signup);
+router.post('/login', loginValidation, validateRequest, login);
 
 export default router;
-

@@ -12,6 +12,7 @@ The project is being built incrementally. The current implementation includes:
 - Signup and login endpoints
 - Password hashing with bcrypt
 - JWT authentication middleware
+- Protected group creation, membership management, and group listing
 - Centralized API error handling
 
 Expense tracking and settlement calculation will be added in later increments.
@@ -54,4 +55,3 @@ client/
    ```
 
 The API is served under `/api/v1`.
-
