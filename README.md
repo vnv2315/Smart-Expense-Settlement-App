@@ -14,6 +14,8 @@ The project is being built incrementally. The current implementation includes:
 - JWT authentication middleware
 - Protected group creation, membership management, and group listing
 - Shared expenses with exact equal splitting in integer paise
+- Net-balance calculation and greedy debt settlement plans
+- Race-safe pending-to-settled debt updates
 - Centralized API error handling
 
 Expense tracking and settlement calculation will be added in later increments.

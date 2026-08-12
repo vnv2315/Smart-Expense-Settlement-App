@@ -7,7 +7,13 @@ import {
   removeMember,
 } from '../controllers/groupController.js';
 import { addExpense } from '../controllers/expenseController.js';
+import { createDebt, settleDebt } from '../controllers/debtController.js';
+import { getSettlement } from '../controllers/settlementController.js';
 import authenticate from '../middleware/authenticate.js';
+import {
+  createDebtValidation,
+  debtIdValidation,
+} from '../middleware/debtValidators.js';
 import { addExpenseValidation } from '../middleware/expenseValidators.js';
 import {
   addMemberValidation,
@@ -43,6 +49,32 @@ router.post(
   validateRequest,
   requireGroupMember,
   addExpense,
+);
+
+router.get(
+  '/:groupId/settlement',
+  groupIdValidation,
+  validateRequest,
+  requireGroupMember,
+  getSettlement,
+);
+
+router.post(
+  '/:groupId/debts',
+  groupIdValidation,
+  createDebtValidation,
+  validateRequest,
+  requireGroupMember,
+  createDebt,
+);
+
+router.patch(
+  '/:groupId/debts/:debtId/settle',
+  groupIdValidation,
+  debtIdValidation,
+  validateRequest,
+  requireGroupMember,
+  settleDebt,
 );
 
 router.delete(
