@@ -1,7 +1,10 @@
 import { body, param } from 'express-validator';
 
 const createGroupValidation = [
-  body('name').trim().notEmpty().withMessage('Group name is required'),
+  body('name')
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Group name must be between 1 and 100 characters'),
 ];
 
 const groupIdValidation = [
@@ -22,4 +25,3 @@ export {
   groupIdValidation,
   removeMemberValidation,
 };
-

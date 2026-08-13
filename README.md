@@ -16,9 +16,9 @@ The project is being built incrementally. The current implementation includes:
 - Shared expenses with exact equal splitting in integer paise
 - Net-balance calculation and greedy debt settlement plans
 - Race-safe pending-to-settled debt updates
-- Centralized API error handling
+- Request validation and centralized API error responses
 
-Expense tracking and settlement calculation will be added in later increments.
+The React frontend will be added in a later increment.
 
 ## Tech stack
 
