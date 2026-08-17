@@ -3,6 +3,8 @@
 A Splitwise-style app for creating groups, recording equally split expenses,
 viewing net balances, and generating a compact debt-settlement plan.
 
+Live app: [smart-expense-settlement-app.vercel.app](https://smart-expense-settlement-app.vercel.app) · API: [smart-expense-settlement-api.onrender.com](https://smart-expense-settlement-api.onrender.com)
+
 ## Features
 
 - JWT signup and login
