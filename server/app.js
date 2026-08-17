@@ -7,8 +7,9 @@ import notFound from './middleware/notFound.js';
 import apiRouter from './routes/index.js';
 
 const app = express();
+const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 
-app.use(cors());
+app.use(cors({ origin: clientUrl }));
 app.use(morgan('dev'));
 app.use(express.json());
 
@@ -18,4 +19,3 @@ app.use(notFound);
 app.use(errorHandler);
 
 export default app;
-

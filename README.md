@@ -1,60 +1,121 @@
 # Smart Expense Settlement App
 
-A Splitwise-style application for creating groups, recording shared expenses,
-and calculating an efficient set of transactions to settle group debts.
+A Splitwise-style app for creating groups, recording equally split expenses,
+viewing net balances, and generating a compact debt-settlement plan.
 
-## Current progress
+## Features
 
-The project is being built incrementally. The current implementation includes:
-
-- Express and MongoDB project structure
-- User and group models with referenced group members
-- Signup and login endpoints
-- Password hashing with bcrypt
-- JWT authentication middleware
+- JWT signup and login
 - Protected group creation, membership management, and group listing
-- Shared expenses with exact equal splitting in integer paise
-- Net-balance calculation and greedy debt settlement plans
-- Race-safe pending-to-settled debt updates
-- Request validation and centralized API error responses
-
-The React frontend will be added in a later increment.
+- Equal expense splitting using integer paise—no floating-point currency errors
+- Net balance calculation and greedy settlement plans
+- Pending debt tracking with race-safe settlement updates
+- Validation, authorization, and centralized API errors
+- React/Vite dashboard for group and settlement views
 
 ## Tech stack
 
-- Node.js and Express
-- MongoDB and Mongoose
-- JWT and bcrypt
-- React with Vite (frontend scaffold)
+- Node.js, Express, MongoDB, and Mongoose
+- JWT, bcrypt, cors, morgan, and express-validator
+- React and Vite
+- Render for the API and Vercel for the client
 
 ## Project structure
 
 ```text
-server/
-  config/
-  controllers/
-  middleware/
-  models/
-  routes/
-client/
-  src/
+server/                 Express API
+client/                 React/Vite frontend
+postman/                Importable API collection
+render.yaml             Render deployment blueprint
 ```
 
-## Local setup
+## Local development
 
-1. Install dependencies:
+1. Install backend dependencies and create `.env` from `.env.example`.
 
    ```bash
    npm install
-   ```
-
-2. Create a `.env` file based on `.env.example` and provide a strong,
-   private `JWT_SECRET`.
-
-3. Start MongoDB and run the development server:
-
-   ```bash
    npm run dev
    ```
 
-The API is served under `/api/v1`.
+2. Install frontend dependencies and create `client/.env` from
+   `client/.env.example`.
+
+   ```bash
+   cd client
+   npm install
+   npm run dev
+   ```
+
+Local environment values:
+
+```env
+# .env
+PORT=5000
+MONGO_URI=your-mongodb-connection-string
+JWT_SECRET=your-long-random-secret
+JWT_EXPIRES_IN=7d
+CLIENT_URL=http://localhost:5173
+
+# client/.env
+VITE_API_URL=http://localhost:5000/api/v1
+```
+
+## API endpoints
+
+All group routes require `Authorization: Bearer <token>`.
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| POST | `/api/v1/auth/signup` | Create an account |
+| POST | `/api/v1/auth/login` | Log in and receive a JWT |
+| POST / GET | `/api/v1/groups` | Create or list groups |
+| POST | `/api/v1/groups/:groupId/members` | Add a member |
+| DELETE | `/api/v1/groups/:groupId/members/:userId` | Remove a member |
+| POST | `/api/v1/groups/:groupId/expenses` | Add an equally split expense |
+| GET | `/api/v1/groups/:groupId/settlement` | Get balances and a settlement plan |
+| POST | `/api/v1/groups/:groupId/debts` | Create a pending debt |
+| PATCH | `/api/v1/groups/:groupId/debts/:debtId/settle` | Mark a debt settled |
+
+Import [Smart-Expense-Settlement-App.postman_collection.json](postman/Smart-Expense-Settlement-App.postman_collection.json)
+into Postman. Run **Log in** first; it saves the JWT in the collection
+variable. Set `memberUserId` and `payerUserId` before requests that need them.
+
+## Deployment
+
+### Render API
+
+Create a Render Web Service from this repository, using the repository root:
+
+- Build command: `npm install`
+- Start command: `npm start`
+- Environment variables: `MONGO_URI`, `JWT_SECRET`, `JWT_EXPIRES_IN`, and
+  `CLIENT_URL`
+
+The included `render.yaml` supplies the non-secret service configuration.
+Enter your actual MongoDB URL only in Render's environment-variable dashboard.
+
+### Vercel frontend
+
+Import the same repository into Vercel and set **Root Directory** to `client`.
+Set this Vercel environment variable before deploying:
+
+```env
+VITE_API_URL=https://your-render-service.onrender.com/api/v1
+```
+
+After Vercel gives you its production URL, set Render's `CLIENT_URL` to that
+exact origin, for example `https://smart-expense-settlement.vercel.app`, and
+redeploy the Render service.
+
+## CORS and environment separation
+
+In local development, the React app runs at `http://localhost:5173` and the
+API allows that exact origin through `CLIENT_URL`. In production, Render uses
+the deployed Vercel origin in `CLIENT_URL`; the browser can then call the API,
+but other origins are not granted CORS access.
+
+The API's secrets stay only in `.env` locally and Render environment variables
+in production. `VITE_API_URL` is intentionally a frontend build-time setting:
+it contains the public API address, never a secret. Neither real `.env` file
+is committed.

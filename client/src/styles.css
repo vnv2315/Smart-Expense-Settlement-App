@@ -1,0 +1,50 @@
+:root {
+  color: #17202a;
+  background: #f7f8fa;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+
+.auth-page, .app-shell { max-width: 1120px; margin: 0 auto; padding: 32px 20px; }
+.auth-page { min-height: 100vh; display: grid; place-items: center; }
+.auth-card, .card, .sidebar, .empty-state { background: #fff; border: 1px solid #e4e8ed; border-radius: 14px; }
+.auth-card { width: min(100%, 420px); padding: 32px; }
+.eyebrow { color: #5c6b7a; font-size: .78rem; font-weight: 700; letter-spacing: .08em; margin: 0; text-transform: uppercase; }
+h1, h2, h3 { margin: 8px 0; }
+.muted { color: #667585; }
+form, label { display: grid; gap: 8px; }
+form { margin-top: 24px; }
+input { border: 1px solid #cbd5df; border-radius: 8px; padding: 10px 12px; }
+button { border: 0; border-radius: 8px; background: #146c94; color: #fff; font-weight: 700; padding: 10px 14px; }
+button:hover { background: #0e587a; }
+button:disabled { cursor: wait; opacity: .65; }
+.text-button { background: transparent; color: #146c94; margin-top: 16px; padding: 0; }
+.secondary-button { background: #e7edf2; color: #243444; }
+.secondary-button:hover { background: #d8e1e8; }
+.error { color: #b42318; margin: 12px 0; }
+.topbar { align-items: center; display: flex; justify-content: space-between; margin-bottom: 24px; }
+.dashboard { display: grid; gap: 24px; grid-template-columns: 260px 1fr; }
+.sidebar { padding: 18px; }
+.create-group { grid-template-columns: 1fr auto; margin: 14px 0; }
+.group-list { display: grid; gap: 6px; }
+.group-button { background: transparent; color: #243444; text-align: left; }
+.group-button:hover, .group-button.selected { background: #dceef6; color: #0e587a; }
+.content { min-width: 0; }
+.group-header { align-items: center; display: flex; justify-content: space-between; margin-bottom: 16px; }
+.card, .empty-state { margin-bottom: 16px; padding: 20px; }
+.member-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.member-chip { background: #edf2f6; border-radius: 999px; padding: 6px 10px; }
+.balance-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.balance-card strong { font-size: 1.25rem; }
+.credit { color: #087443; }
+.debt { color: #b42318; }
+.transaction-list { display: grid; gap: 10px; margin: 0; padding-left: 20px; }
+
+@media (max-width: 700px) {
+  .topbar, .group-header { align-items: flex-start; gap: 12px; flex-direction: column; }
+  .dashboard { grid-template-columns: 1fr; }
+}
