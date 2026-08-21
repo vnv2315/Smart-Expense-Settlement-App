@@ -1,4 +1,5 @@
 import Expense from '../models/Expense.js';
+import { clearPendingSettlements } from '../services/settlementPlanService.js';
 
 const createHttpError = (statusCode, message) => {
   const error = new Error(message);
@@ -29,6 +30,7 @@ const addExpense = async (req, res) => {
   }
 
   const splits = calculateEqualSplits(amountInPaise, group.members);
+  await clearPendingSettlements(group._id);
   const expense = await Expense.create({
     description,
     amountInPaise,

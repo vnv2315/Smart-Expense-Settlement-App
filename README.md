@@ -10,16 +10,16 @@ Live app: [smart-expense-settlement-app.vercel.app](https://smart-expense-settle
 - JWT signup and login
 - Protected group creation, membership management, and group listing
 - Equal expense splitting using integer paise—no floating-point currency errors
-- Net balance calculation and greedy settlement plans
-- Pending debt tracking with race-safe settlement updates
+- Net balance calculation with an exact minimum-transaction settlement plan
+- Persistent settlement records with race-safe status updates
 - Validation, authorization, and centralized API errors
-- React/Vite dashboard for group and settlement views
+- Responsive React/Vite dashboard for group, member, expense, and settlement management
 
 ## Tech stack
 
 - Node.js, Express, MongoDB, and Mongoose
 - JWT, bcrypt, cors, morgan, and express-validator
-- React and Vite
+- React, Vite, and Tailwind CSS
 - Render for the API and Vercel for the client
 
 ## Project structure
@@ -75,13 +75,14 @@ All group routes require `Authorization: Bearer <token>`.
 | POST | `/api/v1/groups/:groupId/members` | Add a member |
 | DELETE | `/api/v1/groups/:groupId/members/:userId` | Remove a member |
 | POST | `/api/v1/groups/:groupId/expenses` | Add an equally split expense |
-| GET | `/api/v1/groups/:groupId/settlement` | Get balances and a settlement plan |
-| POST | `/api/v1/groups/:groupId/debts` | Create a pending debt |
-| PATCH | `/api/v1/groups/:groupId/debts/:debtId/settle` | Mark a debt settled |
+| GET | `/api/v1/groups/:groupId/settlement` | Get balances and persistent settlement records |
+| PATCH | `/api/v1/groups/:groupId/settlements/:settlementId/settle` | Mark one settlement as paid |
 
 Import [Smart-Expense-Settlement-App.postman_collection.json](postman/Smart-Expense-Settlement-App.postman_collection.json)
 into Postman. Run **Log in** first; it saves the JWT in the collection
-variable. Set `memberUserId` and `payerUserId` before requests that need them.
+variable. Getting the settlement plan saves its first settlement ID for the
+mark-settled request. Set `memberUserId` and `payerUserId` before requests that
+need them.
 
 ## Deployment
 

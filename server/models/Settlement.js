@@ -1,18 +1,18 @@
 import mongoose from 'mongoose';
 
-const debtSchema = new mongoose.Schema(
+const settlementSchema = new mongoose.Schema(
   {
     group: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Group',
       required: true,
     },
-    from: {
+    fromUser: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    to: {
+    toUser: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
@@ -23,7 +23,7 @@ const debtSchema = new mongoose.Schema(
       min: 1,
       validate: {
         validator: Number.isSafeInteger,
-        message: 'Debt amount must be an integer number of paise',
+        message: 'Settlement amount must be an integer number of paise',
       },
     },
     status: {
@@ -40,6 +40,15 @@ const debtSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Debt = mongoose.model('Debt', debtSchema);
+settlementSchema.index({ group: 1, status: 1 });
+settlementSchema.index(
+  { group: 1, fromUser: 1, toUser: 1, status: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { status: 'PENDING' },
+  },
+);
 
-export default Debt;
+const Settlement = mongoose.model('Settlement', settlementSchema);
+
+export default Settlement;

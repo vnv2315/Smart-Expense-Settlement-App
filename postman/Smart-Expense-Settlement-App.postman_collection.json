@@ -9,7 +9,7 @@
     { "key": "groupId", "value": "" },
     { "key": "memberUserId", "value": "" },
     { "key": "payerUserId", "value": "" },
-    { "key": "debtId", "value": "" }
+    { "key": "settlementId", "value": "" }
   ],
   "item": [
     {
@@ -53,14 +53,13 @@
       "name": "Expenses and settlement",
       "item": [
         { "name": "Add equal-split expense", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"description\": \"Dinner\",\n  \"amountInPaise\": 10000,\n  \"paidBy\": \"{{payerUserId}}\"\n}" }, "url": "{{baseUrl}}/groups/{{groupId}}/expenses" } },
-        { "name": "Get settlement plan", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/groups/{{groupId}}/settlement" } }
+        { "name": "Get settlement plan", "event": [{ "listen": "test", "script": { "exec": ["const settlements = pm.response.json().settlements;", "if (settlements.length > 0) {", "  pm.collectionVariables.set('settlementId', settlements[0]._id);", "} else {", "  pm.collectionVariables.unset('settlementId');", "}"] } }], "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/groups/{{groupId}}/settlement" } }
       ]
     },
     {
-      "name": "Debts",
+      "name": "Settlements",
       "item": [
-        { "name": "Create debt", "event": [{ "listen": "test", "script": { "exec": ["pm.collectionVariables.set('debtId', pm.response.json().debt._id);"] } }], "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"from\": \"{{memberUserId}}\",\n  \"to\": \"{{payerUserId}}\",\n  \"amountInPaise\": 2500\n}" }, "url": "{{baseUrl}}/groups/{{groupId}}/debts" } },
-        { "name": "Mark debt settled", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/groups/{{groupId}}/debts/{{debtId}}/settle" } }
+        { "name": "Mark settlement settled", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/groups/{{groupId}}/settlements/{{settlementId}}/settle" } }
       ]
     }
   ]

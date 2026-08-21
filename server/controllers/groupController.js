@@ -1,6 +1,6 @@
-import Debt from '../models/Debt.js';
 import Group from '../models/Group.js';
 import User from '../models/User.js';
+import { calculateGroupBalances } from '../services/settlementPlanService.js';
 
 const createHttpError = (statusCode, message) => {
   const error = new Error(message);
@@ -62,14 +62,13 @@ const removeMember = async (req, res) => {
     throw createHttpError(404, 'User is not a group member');
   }
 
-  const hasUnsettledDebt = await Debt.exists({
-    group: group._id,
-    status: 'PENDING',
-    $or: [{ from: req.params.userId }, { to: req.params.userId }],
-  });
+  const balances = await calculateGroupBalances(group);
+  const memberBalance = balances.find(
+    ({ user }) => user === req.params.userId,
+  );
 
-  if (hasUnsettledDebt) {
-    throw createHttpError(409, 'Member has unsettled debts');
+  if (!memberBalance || memberBalance.balanceInPaise !== 0) {
+    throw createHttpError(409, 'Member must have a zero balance before removal');
   }
 
   group.members = group.members.filter(
